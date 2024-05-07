@@ -1,11 +1,27 @@
-import React from 'react'
+import React, { useEffect, useState } from 'react'
 import List from './atom'
 import { useRecoilState } from 'recoil'
 import styles from './ExistedEnquiry.module.css'
+import axios from 'axios'
 
 function ExistedEnquiry() {
 
-  const [existedList, setExistedList] = useRecoilState(List)
+  // const [existedList, setExistedList] = useRecoilState(List)
+  const [existedList, setExistedList] = useState([]);
+
+  useEffect(() => {
+    // Fetch existing enquiries from the server when the component mounts
+    const fetchExistedEnquiries = async () => {
+      try {
+        const response = await axios.get('https://backend-microansys.onrender.com/api/list'); // Assuming your backend API endpoint is '/api/list'
+        setExistedList(response.data);
+      } catch (error) {
+        console.error('Error fetching existing enquiries:', error);
+      }
+    };
+
+    fetchExistedEnquiries(); // Call the fetchExistedEnquiries function when the component mounts
+  }, []);
 
 
   return (
