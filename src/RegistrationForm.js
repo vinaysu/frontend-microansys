@@ -71,7 +71,7 @@ const RegistrationForm = () => {
   function handleChange(event) {
     const { name, value } = event.target;
 
-    const IndNum = /^[0]?[789]\d{9}$/
+    const IndNum = /^[6-9]\d{9}$/
 
     if (name === 'enquirerMobile') {
       setOfflinePinColorMobile(IndNum.test(value) ? 'green' : 'red');
@@ -129,7 +129,7 @@ const RegistrationForm = () => {
       return; // Prevent further execution
     }
 
-    const IndNum = /^[0]?[789]\d{9}$/
+    const IndNum = /^[6-9]\d{9}$/
 
     if (!IndNum.test(formData.enquirerMobile) || !IndNum.test(formData.enquirerWhatsapp)) {
       alert('Please Enter the valid Mobile Number')
