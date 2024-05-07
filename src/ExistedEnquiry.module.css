@@ -2,7 +2,7 @@
     width: 80vw;
     min-height: 80vh;
     margin: auto;
-    border: solid black 1px;
+    border: ridge;
     padding: 0 2rem;
     height: fit-content;
     padding-bottom: 2rem;
