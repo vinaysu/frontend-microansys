@@ -1,0 +1,55 @@
+.main {}
+
+
+.fieldSet {
+  
+    height: 80vh;
+    width: 90vw;
+    margin: auto;
+    border-radius: 1em;
+    border: outset;
+    text-align: center;
+    
+
+
+}
+
+.dateNo {
+    display: flex;
+    justify-content: space-between;
+    padding: 0 3rem;
+    margin-bottom: 3rem;
+    align-items: center;
+    /* border: solid rgb(218, 29, 29) 1px; */
+}
+
+.dateNo b {
+    margin: 0 0.5em;
+}
+
+.textFields {
+    /* border: solid black 1px; */
+    display: flex;
+
+}
+
+.left,
+.right {
+    display: flex;
+    flex-direction: column;
+    /* justify-content: center; */
+    /* align-items: center; */
+    width: 50%;
+    padding-left: 2em;
+    gap: 1.5em;
+}
+
+.field {
+    width: 80%;
+    text-align: left;
+    padding-left: 1em;
+}
+
+
+
+  
