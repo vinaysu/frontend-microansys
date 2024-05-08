@@ -23,6 +23,14 @@ function ExistedEnquiry() {
     fetchExistedEnquiries(); // Call the fetchExistedEnquiries function when the component mounts
   }, []);
 
+  const formatDate = (dateString) => {
+    const date = new Date(dateString);
+    const day = date.getDate().toString().padStart(2, '0');
+    const month = (date.getMonth() + 1).toString().padStart(2, '0');
+    const year = date.getFullYear();
+    return `${day}/${month}/${year}`;
+  };
+
 
   return (
     <div className={styles.main} >
@@ -34,11 +42,14 @@ function ExistedEnquiry() {
                 <thead>
 
                   <th>S.No</th>
-                  <th>Name</th>
-                  <th>Type</th>
-                  <th>Mobile</th>
+                  <th>Date</th>
+                  <th>Enquirer Name</th>
+                  <th>Enquirer Relation</th>
+                  <th>Student Name</th>
+                  <th>Mobile Number</th>
                   <th>Class</th>
-                  <th>Board</th>
+                  <th>Education Board</th>
+                  <th>Enquiry Source</th>
 
                 </thead>
 
@@ -47,11 +58,14 @@ function ExistedEnquiry() {
                   existedList.map((ele, index) =>
                     <tr>
                       <td>{index + 1}</td>
+                      <td>{formatDate(ele.enquiredDate)}</td>
                       <td>{ele.enquirerName}</td>
                       <td>{ele.enquirerType}</td>
+                      <td>{ele.studentName}</td>
                       <td>{ele.enquirerMobile}</td>
                       <td>{ele.studentsClass}</td>
                       <td>{ele.studentsBoard}</td>
+                      <td>source</td>
                     </tr>
                   )
                 }

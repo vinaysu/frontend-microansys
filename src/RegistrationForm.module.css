@@ -1,16 +1,17 @@
 .main {}
 
+legend h3 {
+    color: gray;
+}
 
 .fieldSet {
-  
+
     height: 80vh;
     width: 90vw;
     margin: auto;
     border-radius: 1em;
-    border: outset;
+    border: solid 1px gray;
     text-align: center;
-    
-
 
 }
 
@@ -18,7 +19,7 @@
     display: flex;
     justify-content: space-between;
     padding: 0 3rem;
-    margin-bottom: 3rem;
+    margin-bottom: 2rem;
     align-items: center;
     /* border: solid rgb(218, 29, 29) 1px; */
 }
@@ -30,7 +31,6 @@
 .textFields {
     /* border: solid black 1px; */
     display: flex;
-
 }
 
 .left,
@@ -51,5 +51,25 @@
 }
 
 
+.bottom {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin: 1em;
+    padding: 1rem 6rem 0 25rem;
+}
 
-  
+.verifySection {
+    display: flex;
+    align-items: center;
+
+}
+
+.verifyButtonContainer {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    margin: 1em;
+    gap: 0.2em;
+}

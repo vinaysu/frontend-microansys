@@ -24,6 +24,7 @@ const RegistrationForm = () => {
     productEnquired: '',
     studentsClass: '',
     studentsBoard: '',
+    studentName: '',
     ecenquirerType: false,
     ecenquirerName: false,
     ecenquirerMobile: false,
@@ -31,6 +32,7 @@ const RegistrationForm = () => {
     ecproductEnquired: false,
     ecstudentsClass: false,
     ecstudentsBoard: false,
+    ecstudentName: false
   });
 
   const [list, setList] = useRecoilState(List);
@@ -108,17 +110,20 @@ const RegistrationForm = () => {
     if (!formData.enquirerType) emptyFields.push('enquirerType');
     if (!formData.enquirerName) emptyFields.push('enquirerName');
     if (!formData.enquirerMobile) emptyFields.push('enquirerMobile');
-    if (!formData.enquirerWhatsapp) emptyFields.push('enquirerWhatsapp');
+    // if (!formData.enquirerWhatsapp) emptyFields.push('enquirerWhatsapp');
     if (!formData.productEnquired) emptyFields.push('productEnquired');
     if (!formData.studentsClass) emptyFields.push('studentsClass');
     if (!formData.studentsBoard) emptyFields.push('studentsBoard');
+    if (!formData.studentName) emptyFields.push('studentName');
 
 
     if (emptyFields.length > 0) {
       alert('All fields are mandatory. Please fill in all fields.');
       // Focus on the first empty field
       const firstEmptyField = document.querySelector(`[name="${emptyFields[0]}"]`);
+
       if (firstEmptyField) firstEmptyField.focus();
+
       emptyFields.forEach(field => {
         setFormData(prevData => ({
           ...prevData,
@@ -131,10 +136,22 @@ const RegistrationForm = () => {
 
     const IndNum = /^[6-9]\d{9}$/
 
-    if (!IndNum.test(formData.enquirerMobile) || !IndNum.test(formData.enquirerWhatsapp)) {
-      alert('Please Enter the valid Mobile Number')
+    if (!IndNum.test(formData.enquirerMobile)) {
+      alert('Please enter a valid Mobile Number');
       return;
     }
+
+    // Check if WhatsApp number is provided and validate it if it's not empty
+    if (formData.enquirerWhatsapp && !IndNum.test(formData.enquirerWhatsapp)) {
+      alert('Please enter a valid WhatsApp Number');
+      return;
+    }
+
+
+    // if (!IndNum.test(formData.enquirerMobile) || !IndNum.test(formData.enquirerWhatsapp)) {
+    //   alert('Please Enter a valid Mobile Number')
+    //   return;
+    // }
 
 
     // setList((prevList) => [...prevList, formData]);
@@ -153,6 +170,7 @@ const RegistrationForm = () => {
         productEnquired: '',
         studentsClass: '',
         studentsBoard: '',
+        studentName: ''
       });
 
       alert('Details Submitted successfully');
@@ -184,12 +202,35 @@ const RegistrationForm = () => {
   const classes = ['VI', 'VII', 'VIII', 'IX', 'X'];
   const boards = ['BSEAP', 'BSETG', 'CBSE'];
 
+  const [isSent, setIsSent] = useState(false);
+  const [otpValue, setOtpValue] = useState(['', '', '', '']);
+
+  const handleSendOtp = () => {
+    // Logic to send OTP
+    setIsSent(true);
+  };
+
+  const handleVerifyOtp = (event) => {
+    event.preventDefault();
+    alert('otp verifies successfully')
+    // Logic to verify OTP
+    // If OTP is correct, proceed further
+
+  };
+  const handleChangeOtp = (index, value) => {
+    const newOtpValue = [...otpValue];
+    newOtpValue[index] = value;
+    setOtpValue(newOtpValue);
+  };
+
+
+
   return (
     <div className={styles.main}>
       <form className={styles.form}>
         <fieldset className={styles.fieldSet}>
           <legend>
-            <h2>New Enquiry</h2>
+            <h3>New Enquiry</h3>
           </legend>
           <div className={styles.dateNo} >
             <span>Enquiry No:<b>{list.length + 1}</b></span>
@@ -198,6 +239,7 @@ const RegistrationForm = () => {
           <div className={styles.textFields} >
 
             <div className={styles.left} >
+              {/* <Tooltip title="Select the Enquirer's relation with the Student" > */}
               <TextField
                 select
                 required
@@ -209,17 +251,22 @@ const RegistrationForm = () => {
                     "Enquirer Type"
                   )
                 }
+
                 variant="standard"
                 name="enquirerType"
                 onChange={handleChange}
                 value={formData.enquirerType}
               >
+                <MenuItem disabled value="">
+                  Select the Enquirer's relation with the Student
+                </MenuItem>
                 {enquirerType.map((option) => (
                   <MenuItem key={option} value={option}>
                     {option}
                   </MenuItem>
                 ))}
               </TextField>
+              {/* </Tooltip> */}
 
 
               <TextField required className={styles.field}
@@ -231,7 +278,7 @@ const RegistrationForm = () => {
                   )
                 }
                 variant="standard"
-                placeholder='Enter the Full Name'
+                placeholder='Enter the full name of the Enquirer'
                 name="enquirerName"
                 onChange={handleChange}
                 value={formData.enquirerName}
@@ -240,9 +287,9 @@ const RegistrationForm = () => {
               <TextField required className={styles.field}
                 label={
                   formData.ecenquirerMobile ? (
-                    <span style={{ color: 'red' }}>Enquirer Mobile</span>
+                    <span style={{ color: 'red' }}>Enquirer Mobile Number</span>
                   ) : (
-                    "Enquirer Mobile"
+                    "Enquirer Mobile Number"
                   )
                 }
                 variant="standard"
@@ -257,7 +304,7 @@ const RegistrationForm = () => {
                 // }}
 
                 InputProps={{
-                  endAdornment: formData.enquirerMobile && offlinePinColorMobile ? offlinePinColorMobile == 'red' ? <Tooltip title="Enter the valid mobile number"> <ErrorIcon sx={{ color: offlinePinColorMobile }} /> </Tooltip> : (<OfflinePinIcon sx={{ color: offlinePinColorMobile }} />) : null,
+                  endAdornment: formData.enquirerMobile && offlinePinColorMobile ? offlinePinColorMobile == 'red' ? <Tooltip title="Enter a valid mobile number"> <ErrorIcon sx={{ color: offlinePinColorMobile }} /> </Tooltip> : (<OfflinePinIcon sx={{ color: offlinePinColorMobile }} />) : null,
                 }}
 
                 inputProps={{
@@ -268,17 +315,17 @@ const RegistrationForm = () => {
               />
               {/* <OfflinePinIcon sx={{ color: 'green' }} /> */}
 
-              <TextField required className={styles.field}
+              <TextField className={styles.field}
                 label={
                   formData.ecenquirerWhatsapp ? (
-                    <span style={{ color: 'red' }}>Enquirer Whatsapp</span>
+                    <span style={{ color: 'red' }}>Enquirer Whatsapp Number (optional)</span>
                   ) : (
-                    "Enquirer Whatsapp"
+                    "Enquirer Whatsapp Number (optional) "
                   )
                 }
                 variant="standard"
                 name="enquirerWhatsapp"
-                placeholder='Enter the 10 digits Mobile Number'
+                placeholder='Enter the 10 digits valid Mobile Number'
                 onChange={handleChange}
                 value={formData.enquirerWhatsapp}
 
@@ -289,7 +336,7 @@ const RegistrationForm = () => {
                 // }}
 
                 InputProps={{
-                  endAdornment: formData.enquirerWhatsapp && offlinePinColorWhatsapp ? offlinePinColorWhatsapp == 'red' ? <Tooltip title="Enter the valid mobile number"> <ErrorIcon sx={{ color: offlinePinColorWhatsapp }} /></Tooltip> : (<OfflinePinIcon sx={{ color: offlinePinColorWhatsapp }} />) : null,
+                  endAdornment: formData.enquirerWhatsapp && offlinePinColorWhatsapp ? offlinePinColorWhatsapp == 'red' ? <Tooltip title="Enter a valid mobile number"> <ErrorIcon sx={{ color: offlinePinColorWhatsapp }} /></Tooltip> : (<OfflinePinIcon sx={{ color: offlinePinColorWhatsapp }} />) : null,
                 }}
                 inputProps={{
                   maxLength: 10,
@@ -302,6 +349,7 @@ const RegistrationForm = () => {
 
 
             <div className={styles.right} >
+
               <TextField
                 select
                 required
@@ -327,6 +375,8 @@ const RegistrationForm = () => {
                   </MenuItem>
                 ))}
               </TextField>
+
+
 
 
               <TextField
@@ -372,7 +422,7 @@ const RegistrationForm = () => {
                 value={formData.studentsBoard}
               >
                 <MenuItem disabled value="">
-                  Select the Board in which the student studying in
+                  Select the Board in which the student is studying in
                 </MenuItem>
                 {boards.map((option) => (
                   <MenuItem key={option} value={option}>
@@ -381,6 +431,21 @@ const RegistrationForm = () => {
                 ))}
               </TextField>
 
+              <TextField required className={styles.field}
+                label={
+                  formData.ecstudentName ? (
+                    <span style={{ color: 'red' }}>Student's Name</span>
+                  ) : (
+                    "Student's Name"
+                  )
+                }
+                variant="standard"
+                placeholder='Enter the full name of the student'
+                name="studentName"
+                onChange={handleChange}
+                value={formData.studentName}
+              />
+
             </div>
 
           </div>
@@ -388,14 +453,47 @@ const RegistrationForm = () => {
           {showContent && (
 
 
-            <span style={{ color: 'green' }} >Details Successfully Submitted</span>
+            <span style={{ color: 'green' }} >Enquiry submitted successfully </span>
 
           )}
+          <div className={styles.bottom} >
+            <div className={styles.otpSection}>
+              {!isSent ? (
+                <Button onClick={handleSendOtp} variant="contained" color="primary">
+                  Send OTP
+                </Button>
+              ) : (
+                <div className={styles.verifySection} >
+                  {otpValue.map((value, index) => (
+                    <TextField
+                      sx={{ width: '40px', }}
+                      key={index}
+                      variant="outlined"
+                      value={value}
+                      onChange={(e) => handleChangeOtp(index, e.target.value)}
+                      inputProps={{ maxLength: 1 }}
+                    />
+                  ))}
+                  <div className={styles.verifyButtonContainer}>
 
-          <div className={styles.buttonContainer}>
-            <Button onClick={handleSubmit} variant="outlined"  >
-              SUBMIT
-            </Button>
+                    <span style={{ color: 'green' }} >Otp Sent successfully</span>
+                    <div>
+                      <button style={{ cursor: 'pointer' }} onClick={handleVerifyOtp} variant="contained" color="primary">
+                        Verify OTP
+                      </button>
+                      <span style={{ cursor: 'pointer', color: 'red', margin: '5px' }} >resend ?</span>
+                    </div>
+                  </div>
+                </div>
+              )}
+            </div>
+
+            <div className={styles.buttonContainer}>
+              <Button onClick={handleSubmit} variant="outlined"  >
+                SUBMIT
+              </Button>
+            </div>
+
           </div>
 
         </fieldset>

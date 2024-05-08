@@ -1,9 +1,9 @@
 .main {
     display: flex;
-    justify-content: space-around;
-    background-color: rgb(191, 243, 247);
+    justify-content: space-between;
+    background-color: white;
     align-items: center;
-    padding: 0.3em 0;
+    padding: 0.3em 4rem;
     position: sticky;
     top: 0;
 }
@@ -13,23 +13,22 @@
     align-items: center;
 }
 
-.title {
-    margin: 0 1em;
-    text-align: center;
-}
-
-.title h1 {
-    display: inline;
-}
 
 .left img {
-
     height: 3rem;
-    border-radius: 1em;
-    border: outset;
+    cursor: pointer;
 }
 
-.right Button:hover {
-    background-color: rgb(240, 240, 158);
+.right {
+    display: flex;
+    gap: 2rem;
+
+}
+
+.link:hover {
     color: red;
+    text-decoration: underline;
+    text-underline-offset: 5px;
+    /* adjust thickness as needed */
+    text-decoration-thickness: 0.1em;
 }

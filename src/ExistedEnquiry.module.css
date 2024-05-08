@@ -44,6 +44,7 @@ tr:hover {
 /* Define styles for the S.No column */
 td:first-child {
     text-align: center;
+    width: 2rem;
 }
 
 /* Define styles for the table container */
