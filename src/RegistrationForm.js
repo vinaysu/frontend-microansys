@@ -244,7 +244,7 @@ const RegistrationForm = () => {
           <div className={styles.dateNo} >
             <div>
               <span>Enquiry No:<b>{list.length + 1}</b></span>
-              <select value={enquirySource} onChange={handleEnquirySourceChange} title='Select the source of enquiry'>
+              <select value={enquirySource||'walkin'} onChange={handleEnquirySourceChange} title='Select the source of enquiry'>
                 <option value="walkin">WalkIn</option>
                 <option value="phone">Phone</option>
               </select>
