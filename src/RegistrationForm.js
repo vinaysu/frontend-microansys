@@ -15,6 +15,7 @@ const RegistrationForm = () => {
 
   const [offlinePinColorMobile, setOfflinePinColorMobile] = useState('rgba(0, 0, 0, 0.26)');
   const [offlinePinColorWhatsapp, setOfflinePinColorWhatsapp] = useState('rgba(0, 0, 0, 0.26)');
+  const [enquirySource, setEnquirySource] = useState('');
 
   const [formData, setFormData] = useState({
     enquirerType: '',
@@ -158,7 +159,11 @@ const RegistrationForm = () => {
     // Optionally, you can clear the form after submission
     try {
       // Make a POST request to your server to save the form data
-      const response = await axios.post('https://backend-microansys.onrender.com/api/formdata', formData);
+      const formDataWithSource = {
+        ...formData,
+        enquirySource: enquirySource // Assuming you have declared enquirySource state
+      };
+      const response = await axios.post('https://backend-microansys.onrender.com/api/formdata', formDataWithSource);
       console.log('Form data saved:', response.data);
 
       setList((prevList) => [...prevList, formData]);
@@ -173,7 +178,7 @@ const RegistrationForm = () => {
         studentName: ''
       });
 
-      alert('Details Submitted successfully');
+      alert('Enquiry Submitted successfully');
 
       setShowContent(true);
 
@@ -192,9 +197,9 @@ const RegistrationForm = () => {
   const date = new Date().toLocaleDateString()
   const enquirerType = [
     'Student',
-    'Father',
-    'Mother',
-    'Guardian'
+    'Parent (Father)',
+    'Parent (Mother)',
+    'Parent (Guardian)'
     // Add more options as needed
   ];
 
@@ -212,7 +217,7 @@ const RegistrationForm = () => {
 
   const handleVerifyOtp = (event) => {
     event.preventDefault();
-    alert('otp verifies successfully')
+    alert('OTP verified successfully')
     // Logic to verify OTP
     // If OTP is correct, proceed further
 
@@ -221,6 +226,10 @@ const RegistrationForm = () => {
     const newOtpValue = [...otpValue];
     newOtpValue[index] = value;
     setOtpValue(newOtpValue);
+  };
+
+  const handleEnquirySourceChange = (event) => {
+    setEnquirySource(event.target.value);
   };
 
 
@@ -233,12 +242,15 @@ const RegistrationForm = () => {
             <h3>New Enquiry</h3>
           </legend>
           <div className={styles.dateNo} >
-            <span>Enquiry No:<b>{list.length + 1}</b></span>
-            <select>
-              <option>WalikIn</option>
-              <option>Phone</option>
-              
-            </select>
+            <div>
+              <span>Enquiry No:<b>{list.length + 1}</b></span>
+              <select value={enquirySource} onChange={handleEnquirySourceChange} title='Select the source of enquiry'>
+                <option value="walkin">WalkIn</option>
+                <option value="phone">Phone</option>
+              </select>
+            </div>
+
+
             <span>Enquiry Date:<b>{date} </b></span>
           </div>
           <div className={styles.textFields} >
@@ -361,9 +373,9 @@ const RegistrationForm = () => {
                 className={styles.field}
                 label={
                   formData.ecproductEnquired ? (
-                    <span style={{ color: 'red' }}>Product Enquired</span>
+                    <span style={{ color: 'red' }}>Product Enquired for</span>
                   ) : (
-                    "Product Enquired"
+                    "Product Enquired for"
                   )
                 }
                 variant="standard"
@@ -464,7 +476,7 @@ const RegistrationForm = () => {
           <div className={styles.bottom} >
             <div className={styles.otpSection}>
               {!isSent ? (
-                <Button onClick={handleSendOtp} variant="contained" color="primary">
+                <Button disabled={enquirySource=='phone'?true:false} onClick={handleSendOtp} variant="contained" color="primary">
                   Send OTP
                 </Button>
               ) : (
@@ -481,7 +493,7 @@ const RegistrationForm = () => {
                   ))}
                   <div className={styles.verifyButtonContainer}>
 
-                    <span style={{ color: 'green' }} >Otp Sent successfully</span>
+                    <span style={{ color: 'green' }} >OTP Sent successfully</span>
                     <div>
                       <button style={{ cursor: 'pointer' }} onClick={handleVerifyOtp} variant="contained" color="primary">
                         Verify OTP

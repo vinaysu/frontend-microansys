@@ -65,7 +65,7 @@ function ExistedEnquiry() {
                       <td>{ele.enquirerMobile}</td>
                       <td>{ele.studentsClass}</td>
                       <td>{ele.studentsBoard}</td>
-                      <td>source</td>
+                      <td>{ele.enquirySource}</td>
                     </tr>
                   )
                 }
