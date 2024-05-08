@@ -234,6 +234,11 @@ const RegistrationForm = () => {
           </legend>
           <div className={styles.dateNo} >
             <span>Enquiry No:<b>{list.length + 1}</b></span>
+            <select>
+              <option>WalikIn</option>
+              <option>Phone</option>
+              
+            </select>
             <span>Enquiry Date:<b>{date} </b></span>
           </div>
           <div className={styles.textFields} >
