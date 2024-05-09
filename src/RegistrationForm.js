@@ -16,6 +16,7 @@ const RegistrationForm = () => {
   const [offlinePinColorMobile, setOfflinePinColorMobile] = useState('rgba(0, 0, 0, 0.26)');
   const [offlinePinColorWhatsapp, setOfflinePinColorWhatsapp] = useState('rgba(0, 0, 0, 0.26)');
   const [enquirySource, setEnquirySource] = useState('');
+  const [submitButtondisabled,setSubmitButtondisabled] = useState(true)
 
   const [formData, setFormData] = useState({
     enquirerType: '',
@@ -218,7 +219,9 @@ const RegistrationForm = () => {
 
   const handleVerifyOtp = (event) => {
     event.preventDefault();
+
     alert('OTP verified successfully')
+    setSubmitButtonDisabled(false);
     // Logic to verify OTP
     // If OTP is correct, proceed further
 
@@ -229,8 +232,20 @@ const RegistrationForm = () => {
     setOtpValue(newOtpValue);
   };
 
+  const [submitButtonDisabled, setSubmitButtonDisabled] = useState(true);
+const [sendOtpButtonDisabled, setSendOtpButtonDisabled] = useState(false);
+
   const handleEnquirySourceChange = (event) => {
-    setEnquirySource(event.target.value);
+    const source = event.target.value;
+    setEnquirySource(source);
+
+    if (source === 'phone') {
+      setSubmitButtonDisabled(false);
+      setSendOtpButtonDisabled(true);
+    } else {
+      setSubmitButtonDisabled(true);
+      setSendOtpButtonDisabled(false);
+    }
   };
 
 
@@ -477,7 +492,7 @@ const RegistrationForm = () => {
           <div className={styles.bottom} >
             <div className={styles.otpSection}>
               {!isSent ? (
-                <Button disabled={enquirySource == 'phone' ? true : false} onClick={handleSendOtp} variant="contained" color="primary">
+                <Button disabled={sendOtpButtonDisabled} onClick={handleSendOtp} variant="contained" color="primary">
                   Send OTP
                 </Button>
               ) : (
@@ -507,7 +522,7 @@ const RegistrationForm = () => {
             </div>
 
             <div className={styles.buttonContainer}>
-              <Button onClick={handleSubmit} variant="outlined"  >
+              <Button disabled={submitButtonDisabled} onClick={handleSubmit} variant="outlined"  >
                 SUBMIT
               </Button>
             </div>
