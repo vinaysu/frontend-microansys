@@ -161,8 +161,9 @@ const RegistrationForm = () => {
       // Make a POST request to your server to save the form data
       const formDataWithSource = {
         ...formData,
-        enquirySource: enquirySource // Assuming you have declared enquirySource state
+        enquirySource: enquirySource || 'walkin' // Assuming you have declared enquirySource state
       };
+
       const response = await axios.post('https://backend-microansys.onrender.com/api/formdata', formDataWithSource);
       console.log('Form data saved:', response.data);
 
@@ -244,7 +245,7 @@ const RegistrationForm = () => {
           <div className={styles.dateNo} >
             <div>
               <span>Enquiry No:<b>{list.length + 1}</b></span>
-              <select value={enquirySource||'walkin'} onChange={handleEnquirySourceChange} title='Select the source of enquiry'>
+              <select value={enquirySource} onChange={handleEnquirySourceChange} title='Select the source of enquiry'>
                 <option value="walkin">WalkIn</option>
                 <option value="phone">Phone</option>
               </select>
@@ -476,7 +477,7 @@ const RegistrationForm = () => {
           <div className={styles.bottom} >
             <div className={styles.otpSection}>
               {!isSent ? (
-                <Button disabled={enquirySource=='phone'?true:false} onClick={handleSendOtp} variant="contained" color="primary">
+                <Button disabled={enquirySource == 'phone' ? true : false} onClick={handleSendOtp} variant="contained" color="primary">
                   Send OTP
                 </Button>
               ) : (
