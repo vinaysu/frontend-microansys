@@ -556,7 +556,7 @@ const RegistrationForm = () => {
               <Button
                 disabled={submitButtonDisabled}
                 onClick={handleSubmit}
-                variant="outlined"
+                variant="contained"
               >
                 SUBMIT
               </Button>
