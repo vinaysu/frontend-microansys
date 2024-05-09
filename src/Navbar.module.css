@@ -24,7 +24,7 @@
 }
 
 .link:hover {
-  color: red;
+  color: rgb(118, 118, 250);
   text-decoration: underline;
   text-underline-offset: 5px;
   /* adjust thickness as needed */
