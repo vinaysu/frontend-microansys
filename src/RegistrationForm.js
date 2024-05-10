@@ -219,6 +219,8 @@ const RegistrationForm = () => {
     // If OTP is correct, proceed further
   };
   const handleChangeOtp = (index, value) => {
+
+    if (/^\d*$/.test(value)) {
     const newOtpValue = [...otpValue];
     newOtpValue[index] = value;
     setOtpValue(newOtpValue);
@@ -226,7 +228,7 @@ const RegistrationForm = () => {
     if (value && index < otpInputRefs.current.length - 1) {
       otpInputRefs.current[index + 1].current.focus();
     }
-
+  }
 
   };
 
