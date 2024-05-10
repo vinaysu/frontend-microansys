@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect,useRef } from "react";
 import styles from "./RegistrationForm.module.css";
 import { TextField, Button, MenuItem } from "@mui/material";
 import { useRecoilState } from "recoil";
@@ -222,10 +222,23 @@ const RegistrationForm = () => {
     const newOtpValue = [...otpValue];
     newOtpValue[index] = value;
     setOtpValue(newOtpValue);
+
+    if (value && index < otpInputRefs.current.length - 1) {
+      otpInputRefs.current[index + 1].current.focus();
+    }
+
+
   };
 
   const [submitButtonDisabled, setSubmitButtonDisabled] = useState(true);
   const [sendOtpButtonDisabled, setSendOtpButtonDisabled] = useState(false);
+
+  const otpInputRefs = useRef([
+    React.createRef(),
+    React.createRef(),
+    React.createRef(),
+    React.createRef(),
+  ]);
 
   const handleEnquirySourceChange = (event) => {
     const source = event.target.value;
@@ -519,6 +532,7 @@ const RegistrationForm = () => {
                       sx={{ width: "40px" }}
                       key={index}
                       variant="outlined"
+                      inputRef={otpInputRefs.current[index]}
                       value={value}
                       onChange={(e) => handleChangeOtp(index, e.target.value)}
                       inputProps={{ maxLength: 1 }}
