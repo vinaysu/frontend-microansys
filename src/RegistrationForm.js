@@ -43,6 +43,7 @@ const RegistrationForm = () => {
   const [submitButtonDisabled, setSubmitButtonDisabled] = useState(true);
   const [sendOtpButtonDisabled, setSendOtpButtonDisabled] = useState(false);
   const [otpSentMessage, setOtpSentMessage] = useState("");
+  const [otpVerified,setOtpVerified]=useState(false)
 
   useEffect(() => {
     // Save list data to MongoDB whenever it changes
@@ -182,12 +183,14 @@ const RegistrationForm = () => {
       });
 
       alert("Enquiry Submitted successfully");
-
+      setOtpVerified(false)
+      setIsSent(false)
       setShowContent(true);
 
       setTimeout(() => {
         setShowContent(false);
       }, 5000);
+
     } catch (error) {
       console.error("Error saving form data:", error);
       alert("Failed to submit form data. Please try again.");
@@ -227,7 +230,7 @@ const RegistrationForm = () => {
       setIsSent(true);
     } catch (error) {
       console.error("Error sending OTP at client side:", error);
-      setIsSent(true);
+      // setIsSent(true);
       // Handle error
     }
   };
@@ -243,8 +246,10 @@ const RegistrationForm = () => {
           otp: otpValue.join(""), // Concatenate OTP values
         }
       );
+
       alert(response.data.message); // Display success message
       setSubmitButtonDisabled(false); // Enable submit button
+      setOtpVerified(true)
     } catch (error) {
       alert('invalid otp')
       console.error("Error verifying OTP:", error);
@@ -543,7 +548,7 @@ const RegistrationForm = () => {
 
           {showContent && (
             <span style={{ color: "green" }}>
-              Enquiry submitted successfully{" "}
+              Enquiry submitted successfully
             </span>
           )}
           <div className={styles.bottom}>
@@ -558,6 +563,7 @@ const RegistrationForm = () => {
                   Send OTP
                 </Button>
               ) : (
+                otpVerified?<span style={{color:'green'}} >OTP verified successfully</span>:
                 <div className={styles.verifySection}>
                   {otpValue.map((value, index) => (
                     <TextField
