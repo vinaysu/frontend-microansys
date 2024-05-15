@@ -246,8 +246,9 @@ const RegistrationForm = () => {
       alert(response.data.message); // Display success message
       setSubmitButtonDisabled(false); // Enable submit button
     } catch (error) {
+      alert('invalid otp')
       console.error("Error verifying OTP:", error);
-      setSubmitButtonDisabled(false);
+      // setSubmitButtonDisabled(false);
       // Handle error
     }
   };
