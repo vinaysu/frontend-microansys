@@ -1,4 +1,4 @@
-import React, { useState, useEffect,useRef } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import styles from "./RegistrationForm.module.css";
 import { TextField, Button, MenuItem } from "@mui/material";
 import { useRecoilState } from "recoil";
@@ -38,6 +38,11 @@ const RegistrationForm = () => {
 
   const [list, setList] = useRecoilState(List);
   const [showContent, setShowContent] = useState(false);
+  const [isSent, setIsSent] = useState(false);
+  const [otpValue, setOtpValue] = useState(["", "", "", ""]);
+  const [submitButtonDisabled, setSubmitButtonDisabled] = useState(true);
+  const [sendOtpButtonDisabled, setSendOtpButtonDisabled] = useState(false);
+  const [otpSentMessage, setOtpSentMessage] = useState("");
 
   useEffect(() => {
     // Save list data to MongoDB whenever it changes
@@ -190,6 +195,7 @@ const RegistrationForm = () => {
   }
 
   const date = new Date().toLocaleDateString();
+
   const enquirerType = [
     "Student",
     "Parent (Father)",
@@ -202,38 +208,61 @@ const RegistrationForm = () => {
   const classes = ["VI", "VII", "VIII", "IX", "X"];
   const boards = ["BSEAP", "BSETG", "CBSE"];
 
-  const [isSent, setIsSent] = useState(false);
-  const [otpValue, setOtpValue] = useState(["", "", "", ""]);
+  const handleSendOtp = async () => {
+    try {
+      // Make a POST request to your backend to send OTP using Twilio
+      if (!formData.enquirerMobile) {
+        alert("Please enter your mobile number");
+        return;
+      }
+      alert("entered");
+      const response = await axios.post(
+        "https://backend-microansys.onrender.com/sendOTP",
+        {
+          mobileNumber: formData.enquirerMobile, // Assuming mobile number is stored in formData.enquirerMobile
+        }
+      );
 
-  const handleSendOtp = () => {
-    // Logic to send OTP
-    setIsSent(true);
-  };
-
-  const handleVerifyOtp = (event) => {
-    event.preventDefault();
-
-    alert("OTP verified successfully");
-    setSubmitButtonDisabled(false);
-    // Logic to verify OTP
-    // If OTP is correct, proceed further
-  };
-  const handleChangeOtp = (index, value) => {
-
-    if (/^\d*$/.test(value)) {
-    const newOtpValue = [...otpValue];
-    newOtpValue[index] = value;
-    setOtpValue(newOtpValue);
-
-    if (value && index < otpInputRefs.current.length - 1) {
-      otpInputRefs.current[index + 1].current.focus();
+      setOtpSentMessage(response.data.message);
+      setIsSent(true);
+    } catch (error) {
+      console.error("Error sending OTP at client side:", error);
+      setIsSent(true);
+      // Handle error
     }
-  }
-
   };
 
-  const [submitButtonDisabled, setSubmitButtonDisabled] = useState(true);
-  const [sendOtpButtonDisabled, setSendOtpButtonDisabled] = useState(false);
+  const handleVerifyOtp = async (event) => {
+    event.preventDefault();
+    try {
+      // Make a POST request to your backend to verify OTP using Twilio
+      const response = await axios.post(
+        "https://backend-microansys.onrender.com/verifyOTP",
+        {
+          mobileNumber: formData.enquirerMobile, // Assuming mobile number is stored in formData.enquirerMobile
+          otp: otpValue.join(""), // Concatenate OTP values
+        }
+      );
+      alert(response.data.message); // Display success message
+      setSubmitButtonDisabled(false); // Enable submit button
+    } catch (error) {
+      console.error("Error verifying OTP:", error);
+      setSubmitButtonDisabled(false);
+      // Handle error
+    }
+  };
+
+  const handleChangeOtp = (index, value) => {
+    if (/^\d*$/.test(value)) {
+      const newOtpValue = [...otpValue];
+      newOtpValue[index] = value;
+      setOtpValue(newOtpValue);
+
+      if (value && index < otpInputRefs.current.length - 1) {
+        otpInputRefs.current[index + 1].current.focus();
+      }
+    }
+  };
 
   const otpInputRefs = useRef([
     React.createRef(),
