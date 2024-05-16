@@ -42,12 +42,36 @@ const RegistrationForm = () => {
   const [otpValue, setOtpValue] = useState(["", "", "", ""]);
   const [submitButtonDisabled, setSubmitButtonDisabled] = useState(true);
   const [sendOtpButtonDisabled, setSendOtpButtonDisabled] = useState(false);
-  const [otpSentMessage, setOtpSentMessage] = useState("");
+
   const [otpVerified, setOtpVerified] = useState(false);
 
   const [otpCountdown, setOtpCountdown] = useState(30);
   const [otpResendDisabled, setOtpResendDisabled] = useState(true);
   const [otpTimerVisible, setOtpTimerVisible] = useState(true);
+  const [useSameNumber, setUseSameNumber] = useState(false);
+
+  const handleCheckboxChange = () => {
+    const IndNum = /^[6-9]\d{9}$/;
+    setOfflinePinColorWhatsapp(
+      IndNum.test(formData.enquirerMobile) ? "green" : "red"
+    );
+
+    setUseSameNumber((prevValue) => !prevValue);
+
+    if (!useSameNumber) {
+      // If the checkbox is checked, fill Enquirer Whatsapp Number with Enquirer Mobile Number
+      setFormData((prevData) => ({
+        ...prevData,
+        enquirerWhatsapp: formData.enquirerMobile,
+      }));
+    } else {
+      // If the checkbox is unchecked, clear Enquirer Whatsapp Number
+      setFormData((prevData) => ({
+        ...prevData,
+        enquirerWhatsapp: "",
+      }));
+    }
+  };
 
   useEffect(() => {
     // Save list data to MongoDB whenever it changes
@@ -241,8 +265,7 @@ const RegistrationForm = () => {
   };
 
   async function handleResendOtp(event) {
-
-      event.preventDefault()
+    event.preventDefault();
 
     try {
       // Make a POST request to your backend to send OTP using Twilio
@@ -457,6 +480,7 @@ const RegistrationForm = () => {
                   maxLength: 10, // Maximum length allowed
                 }}
               />
+
               {/* <OfflinePinIcon sx={{ color: 'green' }} /> */}
 
               <TextField
@@ -482,20 +506,37 @@ const RegistrationForm = () => {
                 // }}
 
                 InputProps={{
-                  endAdornment:
-                    formData.enquirerWhatsapp && offlinePinColorWhatsapp ? (
-                      offlinePinColorWhatsapp == "red" ? (
-                        <Tooltip title="Enter a valid mobile number">
-                          {" "}
-                          <ErrorIcon sx={{ color: offlinePinColorWhatsapp }} />
-                        </Tooltip>
-                      ) : (
-                        <OfflinePinIcon
-                          sx={{ color: offlinePinColorWhatsapp }}
-                        />
-                      )
-                    ) : null,
+                  endAdornment: (
+                    <div className={styles.insideField}>
+
+                      <small>same as above</small>
+                      <input
+                        className={styles.checkBox}
+                        checked={useSameNumber}
+                        onChange={handleCheckboxChange}
+                        type="checkbox"
+                      />
+                      
+                      {formData.enquirerWhatsapp && offlinePinColorWhatsapp ? (
+                        offlinePinColorWhatsapp == "red" ? (
+                          <Tooltip title="Enter a valid mobile number">
+                            {" "}
+                            <ErrorIcon
+                              sx={{ color: offlinePinColorWhatsapp }}
+                            />
+                          </Tooltip>
+                        ) : (
+                          <OfflinePinIcon
+                            sx={{ color: offlinePinColorWhatsapp }}
+                          />
+                        )
+                      ) : null}
+
+
+                    </div>
+                  ),
                 }}
+                disabled={useSameNumber}
                 inputProps={{
                   maxLength: 10,
                 }}
@@ -624,6 +665,7 @@ const RegistrationForm = () => {
                 <div className={styles.verifySection}>
                   {otpValue.map((value, index) => (
                     <TextField
+                      autoFocus={index == 0 ? true : false}
                       sx={{ width: "40px" }}
                       key={index}
                       variant="outlined"

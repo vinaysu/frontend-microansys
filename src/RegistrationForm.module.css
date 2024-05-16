@@ -75,3 +75,16 @@ select {
   margin: 1em;
   gap: 0.2em;
 }
+
+
+.insideField{
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 5px;
+}
+small{
+  text-wrap:nowrap;
+}
+
+
