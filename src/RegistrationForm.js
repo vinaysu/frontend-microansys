@@ -45,6 +45,10 @@ const RegistrationForm = () => {
   const [otpSentMessage, setOtpSentMessage] = useState("");
   const [otpVerified, setOtpVerified] = useState(false);
 
+  const [otpCountdown, setOtpCountdown] = useState(30);
+  const [otpResendDisabled, setOtpResendDisabled] = useState(true);
+  const [otpTimerVisible, setOtpTimerVisible] = useState(true);
+
   useEffect(() => {
     // Save list data to MongoDB whenever it changes
     const saveList = async () => {
@@ -186,7 +190,7 @@ const RegistrationForm = () => {
       setOtpVerified(false);
       setIsSent(false);
       setShowContent(true);
-      setSubmitButtonDisabled(true)
+      setSubmitButtonDisabled(true);
       setOtpValue(["", "", "", ""]);
 
       setTimeout(() => {
@@ -219,15 +223,15 @@ const RegistrationForm = () => {
         alert("Please enter your mobile number");
         return;
       }
-      alert("entered");
+
       const response = await axios.post(
         "https://backend-microansys.onrender.com/sendOTP",
         {
           mobileNumber: formData.enquirerMobile, // Assuming mobile number is stored in formData.enquirerMobile
         }
       );
+      alert("OTP sent successfully to the Enquirer mobile number");
 
-      setOtpSentMessage(response.data.message);
       setIsSent(true);
     } catch (error) {
       console.error("Error sending OTP at client side:", error);
@@ -235,6 +239,37 @@ const RegistrationForm = () => {
       // Handle error
     }
   };
+
+  async function handleResendOtp() {
+    try {
+      // Make a POST request to your backend to send OTP using Twilio
+      if (!formData.enquirerMobile) {
+        alert("Please enter your mobile number");
+        return;
+      }
+
+      const response = await axios.post(
+        "https://backend-microansys.onrender.com/sendOTP",
+        {
+          mobileNumber: formData.enquirerMobile, // Assuming mobile number is stored in formData.enquirerMobile
+        }
+      );
+
+      
+      setOtpResendDisabled(true);
+      setOtpCountdown(30);
+      setOtpTimerVisible(true)
+
+
+      alert("OTP sent successfully to the Enquirer mobile number");
+
+      setIsSent(true);
+    } catch (error) {
+      console.error("Error sending OTP at client side:", error);
+      // setIsSent(true);
+      // Handle error
+    }
+  }
 
   const handleVerifyOtp = async (event) => {
     event.preventDefault();
@@ -290,6 +325,23 @@ const RegistrationForm = () => {
       setSendOtpButtonDisabled(false);
     }
   };
+
+  useEffect(() => {
+    if (otpCountdown > 0) {
+      const countdownTimeout = setTimeout(() => {
+        setOtpCountdown((prevCount) => {
+          if (prevCount === 1) {
+            setOtpResendDisabled(false);
+            setOtpTimerVisible(false);
+            return 0;
+          }
+          return prevCount - 1;
+        });
+      }, 1000);
+
+      return () => clearTimeout(countdownTimeout); // Cleanup function to clear the timeout when component unmounts or otpCountdown changes
+    }
+  }, [otpCountdown]);
 
   return (
     <div className={styles.main}>
@@ -593,15 +645,19 @@ const RegistrationForm = () => {
                       >
                         Verify OTP
                       </button>
-                      <span
+                      <button
+                        disabled={otpResendDisabled}
+                        onClick={handleResendOtp}
                         style={{
                           cursor: "pointer",
                           color: "red",
                           margin: "5px",
                         }}
+
                       >
                         resend ?
-                      </span>
+                      </button>
+                      {otpTimerVisible && <span>in {otpCountdown}</span>}
                     </div>
                   </div>
                 </div>
