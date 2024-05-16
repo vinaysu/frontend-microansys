@@ -231,7 +231,7 @@ const RegistrationForm = () => {
         }
       );
       alert("OTP sent successfully to the Enquirer mobile number");
-
+      setOtpCountdown(30);
       setIsSent(true);
     } catch (error) {
       console.error("Error sending OTP at client side:", error);
@@ -240,7 +240,10 @@ const RegistrationForm = () => {
     }
   };
 
-  async function handleResendOtp() {
+  async function handleResendOtp(event) {
+
+      event.preventDefault()
+
     try {
       // Make a POST request to your backend to send OTP using Twilio
       if (!formData.enquirerMobile) {
@@ -255,11 +258,9 @@ const RegistrationForm = () => {
         }
       );
 
-      
       setOtpResendDisabled(true);
       setOtpCountdown(30);
-      setOtpTimerVisible(true)
-
+      setOtpTimerVisible(true);
 
       alert("OTP sent successfully to the Enquirer mobile number");
 
@@ -653,7 +654,6 @@ const RegistrationForm = () => {
                           color: "red",
                           margin: "5px",
                         }}
-
                       >
                         resend ?
                       </button>
