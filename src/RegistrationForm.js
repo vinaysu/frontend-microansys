@@ -51,6 +51,13 @@ const RegistrationForm = () => {
   const [useSameNumber, setUseSameNumber] = useState(false);
 
   const handleCheckboxChange = () => {
+
+    if(!formData.enquirerMobile){
+      alert('Please enter the Enquirer mobile number first')
+      return
+    }
+
+
     const IndNum = /^[6-9]\d{9}$/;
     setOfflinePinColorWhatsapp(
       IndNum.test(formData.enquirerMobile) ? "green" : "red"
@@ -516,7 +523,7 @@ const RegistrationForm = () => {
                         onChange={handleCheckboxChange}
                         type="checkbox"
                       />
-                      
+
                       {formData.enquirerWhatsapp && offlinePinColorWhatsapp ? (
                         offlinePinColorWhatsapp == "red" ? (
                           <Tooltip title="Enter a valid mobile number">
