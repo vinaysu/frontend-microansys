@@ -58,7 +58,7 @@ function ExistedEnquiry() {
   return (
     <div className={styles.main}>
       <div className={styles.topName}>
-        <h3>Enquiry List</h3>
+        <h3>Existing enquiry list</h3>
         <input
           type="text"
           placeholder="Search by student name"
