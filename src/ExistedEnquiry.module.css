@@ -1,6 +1,6 @@
 .content {
   width: 80vw;
-  min-height: 80vh;
+  min-height: 70vh;
   margin: auto;
   border: ridge;
   padding: 0 2rem;
@@ -54,4 +54,20 @@ td:first-child {
 table {
   border: 1px solid #ddd;
   border-radius: 5px;
+}
+
+.searchBar {
+  height: 2rem;
+  border-radius: 5px;
+}
+
+.topName {
+  display: flex;
+  padding: 0 2rem;
+  justify-content: space-around;
+  align-items: center;
+  width: 80vw;
+  background-color: rgb(221, 248, 239);
+  margin: auto;
+  border: ridge;
 }

@@ -1,16 +1,28 @@
 import React, { useEffect, useState } from "react";
-import List from "./atom";
-import { useRecoilState } from "recoil";
-import styles from "./ExistedEnquiry.module.css";
 import axios from "axios";
 import * as XLSX from "xlsx";
+import styles from "./ExistedEnquiry.module.css";
 
 function ExistedEnquiry() {
   const [existedList, setExistedList] = useState([]);
+  const [filteredList, setFilteredList] = useState([]);
+  const [searchTerm, setSearchTerm] = useState("");
 
   useEffect(() => {
     fetchExistedEnquiries();
   }, []);
+
+  useEffect(() => {
+    if (searchTerm === "") {
+      setFilteredList(existedList);
+    } else {
+      const lowercasedSearchTerm = searchTerm.toLowerCase();
+      const newFilteredList = existedList.filter((item) =>
+        item.studentName.toLowerCase().includes(lowercasedSearchTerm)
+      );
+      setFilteredList(newFilteredList);
+    }
+  }, [searchTerm, existedList]);
 
   const fetchExistedEnquiries = async () => {
     try {
@@ -18,6 +30,7 @@ function ExistedEnquiry() {
         "https://backend-microansys.onrender.com/api/list"
       );
       setExistedList(response.data);
+      setFilteredList(response.data);
     } catch (error) {
       console.error("Error fetching existing enquiries:", error);
     }
@@ -33,15 +46,30 @@ function ExistedEnquiry() {
 
   const downloadExcel = () => {
     const workbook = XLSX.utils.book_new();
-    const worksheet = XLSX.utils.json_to_sheet(existedList);
+    const worksheet = XLSX.utils.json_to_sheet(filteredList);
     XLSX.utils.book_append_sheet(workbook, worksheet, "Enquiries");
     XLSX.writeFile(workbook, "enquiries.xlsx");
   };
 
+  const handleSearchChange = (event) => {
+    setSearchTerm(event.target.value);
+  };
+
   return (
     <div className={styles.main}>
+      <div className={styles.topName}>
+        <h3>Enquiry List</h3>
+        <input
+          type="text"
+          placeholder="Search by student name"
+          value={searchTerm}
+          onChange={handleSearchChange}
+          className={styles.searchBar}
+          autoFocus={true}
+        />
+      </div>
       <div className={styles.content}>
-        {existedList.length !== 0 ? (
+        {filteredList.length !== 0 ? (
           <div className={styles.enquiryList}>
             <table>
               <thead>
@@ -58,7 +86,7 @@ function ExistedEnquiry() {
                 </tr>
               </thead>
               <tbody>
-                {existedList.map((ele, index) => (
+                {filteredList.map((ele, index) => (
                   <tr key={index}>
                     <td>{index + 1}</td>
                     <td>{formatDate(ele.enquiredDate)}</td>
@@ -77,7 +105,7 @@ function ExistedEnquiry() {
           </div>
         ) : (
           <center>
-            <h2>No enquiries yet. Please Enquire Now.</h2>
+            <h2>{searchTerm ? "Enquiry not found" : "No enquiries yet. Please Enquire Now."}</h2>
           </center>
         )}
       </div>
@@ -86,4 +114,6 @@ function ExistedEnquiry() {
 }
 
 export default ExistedEnquiry;
+
+
 

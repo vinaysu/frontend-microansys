@@ -56,8 +56,8 @@ const RegistrationForm = () => {
       alert('Please enter the Enquirer mobile number first')
       return
     }
-
-
+      
+  
     const IndNum = /^[6-9]\d{9}$/;
     setOfflinePinColorWhatsapp(
       IndNum.test(formData.enquirerMobile) ? "green" : "red"
