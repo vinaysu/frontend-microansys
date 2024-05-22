@@ -30,7 +30,7 @@ function ExistedEnquiry() {
         "https://backend-microansys.onrender.com/api/list"
       );
       setExistedList(response.data);
-      setFilteredList(response.data); // Set filteredList initially to the fetched data
+      setFilteredList(response.data);
     } catch (error) {
       console.error("Error fetching existing enquiries:", error);
     }
@@ -58,13 +58,14 @@ function ExistedEnquiry() {
   return (
     <div className={styles.main}>
       <div className={styles.topName}>
-        <h4>Enquiry List</h4>
+        <h3>Enquiry List</h3>
         <input
           type="text"
           placeholder="Search by student name"
           value={searchTerm}
           onChange={handleSearchChange}
           className={styles.searchBar}
+          autoFocus={true}
         />
       </div>
       <div className={styles.content}>
@@ -113,7 +114,6 @@ function ExistedEnquiry() {
 }
 
 export default ExistedEnquiry;
-
 
 
 
