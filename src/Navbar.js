@@ -2,7 +2,7 @@ import React from "react";
 import logo from "./SS logo for website.png";
 import { Button } from "@mui/material";
 import styles from "./Navbar.module.css";
-import { Link } from "react-router-dom";
+import { Link, NavLink } from "react-router-dom";
 
 function Navbar() {
   return (
@@ -13,29 +13,23 @@ function Navbar() {
 
       <div className={styles.right}>
         <span className={styles.link}>
-          <Link
+          <NavLink
             to="/"
-            style={{
-              textDecoration: "none",
-              color: "black",
-              fontWeight: "450",
-            }}
+          
+            className={({ isActive }) => (isActive ? `${styles.active}` : `${styles.inactive}`)}
           >
             New enquiry
-          </Link>
+          </NavLink>
         </span>
 
         <span className={styles.link}>
-          <Link
+          <NavLink
             to="/existed enquiry"
-            style={{
-              textDecoration: "none",
-              color: "black",
-              fontWeight: "450",
-            }}
+          
+            className={({ isActive }) => (isActive ? `${styles.active}` : `${styles.inactive}`)}
           >
             Existing enquiry
-          </Link>
+          </NavLink>
         </span>
       </div>
     </div>

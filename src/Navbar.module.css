@@ -24,9 +24,22 @@
 }
 
 .link:hover {
-  color: rgb(118, 118, 250);
+  color: black;
   text-decoration: underline;
   text-underline-offset: 10px;
-  /* adjust thickness as needed */
+  text-decoration-thickness: 0.1em;
+}
+
+.inactive {
+  color: black;
+  font-weight: 600;
+  text-decoration: none;
+}
+
+.active {
+  font-weight: 600;
+  color: rgb(85, 243, 45);
+  text-decoration: underline;
+  text-underline-offset: 10px;
   text-decoration-thickness: 0.1em;
 }
